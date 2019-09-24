@@ -11,19 +11,16 @@
 void getRandomStr(int strSize) {
 }
 
-int getCountFreqCharInStr(std::string strPar, char chPar) {
+int getCountFreqCharInStr(char* str, char ch) {
     int size, rank;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    // std::string str = strPar;
-    char *str = new char[strPar.length()];
-    char ch = chPar;
-    const int delta = strPar.length() / size;
-    const int remainder = strPar.length() % size;
+    const int delta = strlen(str) / size;
+    const int remainder = strlen(str) % size;
 
     if (rank == 0) {
-        for (int proc = 1; proc < size; ++proc) {
+        for (int proc = 1; proc < size; proc++) {
             if (delta > 0) {
                 MPI_Send(&str[remainder] + proc * delta, delta, MPI_CHAR, proc, 1, MPI_COMM_WORLD);
                 MPI_Send(&ch, 1, MPI_CHAR, proc, 2, MPI_COMM_WORLD);
@@ -31,31 +28,30 @@ int getCountFreqCharInStr(std::string strPar, char chPar) {
         }
     }
 
-    char *strLocal = new char[strPar.length()];
-    // std::string strLocal;
+    char* strLocal = new char [delta + remainder];
     char chLocal;
 
     if (rank == 0) {
         for (int i = 0; i < delta + remainder; i++) {
-            strLocal += str[i];
+            strLocal[i] = str[i];
         }
         chLocal = ch;
     } else {
         MPI_Status status;
         if (delta > 0) {
-            MPI_Recv(&strLocal, delta, MPI_CHAR, 0, 1, MPI_COMM_WORLD, &status);
+            MPI_Recv(&strLocal[0], delta, MPI_CHAR, 0, 1, MPI_COMM_WORLD, &status);
             MPI_Recv(&chLocal, delta, MPI_INT, 0, 2, MPI_COMM_WORLD, &status);
         }
     }
 
     int count = 0;
-    for (int i = 0; i <= static_cast<int>(strLocal.length()); i++) {
+    for (int i = 0; i <= static_cast<int>(strlen(strLocal)); i++) {
         if (strLocal[i] == chLocal)
             count++;
     }
 
     if (rank == 0) {
-        for (int proc = 1; proc < size; ++proc) {
+        for (int proc = 1; proc < size; proc++) {
             int temp;
             MPI_Status status;
             MPI_Recv(&temp, 1, MPI_INT, MPI_ANY_SOURCE, 3, MPI_COMM_WORLD, &status);
