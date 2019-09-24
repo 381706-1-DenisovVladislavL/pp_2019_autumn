@@ -3,7 +3,7 @@
 #include <random>
 #include <ctime>
 #include <stdexcept>
-#include <string>
+#include <cstring>
 #include "../../../modules/task_1/denisov_v_count_frequency_char_in_str/count_frequency_char_in_str.h"
 
 // static int offset = 0;

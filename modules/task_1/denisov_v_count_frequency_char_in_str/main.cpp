@@ -2,7 +2,7 @@
 #include <gtest-mpi-listener.hpp>
 #include <gtest/gtest.h>
 #include <stdio.h>
-#include <string>
+#include <cstring>
 #include "./count_frequency_char_in_str.h"
 
 TEST(Count_frequency_char_in_str, Test_Name_1) {
