@@ -2,15 +2,16 @@
 #include <gtest-mpi-listener.hpp>
 #include <gtest/gtest.h>
 #include <stdio.h>
+#include <string>
 #include "./count_frequency_char_in_str.h"
 
 TEST(Count_frequency_char_in_str, Test_Name_1) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    
+
     std::string str = "aababas";
     char ch = 'a';
-
+    
     int count = getCountFreqCharInStr(str, ch);
 
     if (rank == 0) {
@@ -23,22 +24,6 @@ TEST(Count_frequency_char_in_str, Test_Name_1) {
         ASSERT_EQ(seqCount, count);
     }
 }
-
-//TEST(Count_frequency_char_in_str, Test_Name_2) {
-//   
-//}
-
-//TEST(Count_frequency_char_in_str, Test_Name_3) {
-//   
-//}
-
-//TEST(Count_frequency_char_in_str, Test_Name_4) {
-//   
-//}
-
-//TEST(Count_frequency_char_in_str, Test_Name_5) {
-//  
-//}
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

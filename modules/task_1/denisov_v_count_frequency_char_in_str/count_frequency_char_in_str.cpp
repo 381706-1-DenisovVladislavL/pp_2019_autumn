@@ -34,8 +34,7 @@ int getCountFreqCharInStr(std::string str, char ch) {
             strLocal += str[i];
         }
         chLocal = ch;
-    }
-    else {
+    } else {
         MPI_Status status;
         if (delta > 0) {
             MPI_Recv(&strLocal, delta, MPI_CHAR, 0, 1, MPI_COMM_WORLD, &status);
@@ -56,8 +55,7 @@ int getCountFreqCharInStr(std::string str, char ch) {
             MPI_Recv(&temp, 1, MPI_INT, MPI_ANY_SOURCE, 3, MPI_COMM_WORLD, &status);
             count += temp;
         }
-    }
-    else {
+    } else {
         MPI_Send(&count, 1, MPI_INT, 0, 3, MPI_COMM_WORLD);
     }
 
