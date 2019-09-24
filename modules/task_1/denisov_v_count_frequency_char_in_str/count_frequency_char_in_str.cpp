@@ -11,10 +11,13 @@
 void getRandomStr(int strSize) {
 }
 
-int getCountFreqCharInStr(std::string str, char ch) {
+int getCountFreqCharInStr(std::string strPar, char chPar) {
     int size, rank;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    std::string str = strPar;
+    char ch = chPar;
     const int delta = str.length() / size;
     const int remainder = str.length() % size;
 
