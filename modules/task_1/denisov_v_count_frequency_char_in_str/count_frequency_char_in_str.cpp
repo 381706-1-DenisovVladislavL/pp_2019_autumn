@@ -45,7 +45,7 @@ int getCountFreqCharInStr(std::string str, char ch) {
 
     int count = 0;
     for (int i = 0; i <= static_cast<int>(strLocal.length()); i++) {
-        if (strLocal[i] == chLocal) 
+        if (strLocal[i] == chLocal)
             count++;
     }
 
