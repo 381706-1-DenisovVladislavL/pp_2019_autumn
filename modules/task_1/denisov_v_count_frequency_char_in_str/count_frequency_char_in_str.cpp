@@ -3,6 +3,7 @@
 #include <random>
 #include <ctime>
 #include <stdexcept>
+#include <string>
 #include "../../../modules/task_1/denisov_v_count_frequency_char_in_str/count_frequency_char_in_str.h"
 
 static int offset = 0;
@@ -43,7 +44,7 @@ int getCountFreqCharInStr(std::string str, char ch) {
     }
 
     int count = 0;
-    for (int i = 0; i <= int(strLocal.length()); i++) {
+    for (int i = 0; i <= static_cast<int>(strLocal.length()); i++) {
         if (strLocal[i] == chLocal) 
             count++;
     }

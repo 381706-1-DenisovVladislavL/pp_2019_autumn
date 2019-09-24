@@ -11,7 +11,7 @@ TEST(Count_frequency_char_in_str, Test_Name_1) {
 
     std::string str = "aababas";
     char ch = 'a';
-    
+
     int count = getCountFreqCharInStr(str, ch);
 
     if (rank == 0) {
