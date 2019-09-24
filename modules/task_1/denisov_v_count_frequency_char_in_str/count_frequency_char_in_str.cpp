@@ -28,7 +28,7 @@ int getCountFreqCharInStr(char* str, char ch) {
         }
     }
 
-    char* strLocal = new char [delta + remainder];
+    char* strLocal = new char[delta + remainder];
     char chLocal;
 
     if (rank == 0) {
