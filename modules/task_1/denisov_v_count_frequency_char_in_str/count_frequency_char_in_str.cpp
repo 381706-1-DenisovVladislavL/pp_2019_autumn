@@ -6,7 +6,7 @@
 #include <string>
 #include "../../../modules/task_1/denisov_v_count_frequency_char_in_str/count_frequency_char_in_str.h"
 
-static int offset = 0;
+//static int offset = 0;
 
 void getRandomStr(int strSize) {
 }
