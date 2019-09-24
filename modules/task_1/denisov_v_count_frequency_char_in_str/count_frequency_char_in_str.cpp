@@ -16,10 +16,11 @@ int getCountFreqCharInStr(std::string strPar, char chPar) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    std::string str = strPar;
+    // std::string str = strPar;
+    char *str = new char[strPar.length()];
     char ch = chPar;
-    const int delta = str.length() / size;
-    const int remainder = str.length() % size;
+    const int delta = strPar.length() / size;
+    const int remainder = strPar.length() % size;
 
     if (rank == 0) {
         for (int proc = 1; proc < size; ++proc) {
@@ -30,7 +31,8 @@ int getCountFreqCharInStr(std::string strPar, char chPar) {
         }
     }
 
-    std::string strLocal;
+    char *strLocal = new char[strPar.length()];
+    // std::string strLocal;
     char chLocal;
 
     if (rank == 0) {
