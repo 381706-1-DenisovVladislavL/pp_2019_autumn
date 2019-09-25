@@ -1,6 +1,7 @@
 // Copyright 2019 Denisov Vladislav
 #include <mpi.h>
 #include <random>
+#include <cstring>
 #include "../../../modules/task_1/denisov_v_count_frequency_char_in_str/count_frequency_char_in_str.h"
 
 void getRandomStr(char *str, int strSize) {
