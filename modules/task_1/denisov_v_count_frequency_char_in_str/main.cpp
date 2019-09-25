@@ -28,8 +28,7 @@ TEST(Count_frequency_char_in_str, Test_Name_1) {
 TEST(Count_frequency_char_in_str, Test_Name_2) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	
-	int size = 10;
+    int size = 10;
     char *str = new char[size];
     ASSERT_NO_THROW(getRandomStr(str, size));
 
