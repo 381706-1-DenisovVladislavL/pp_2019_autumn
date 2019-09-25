@@ -5,7 +5,7 @@
 #include <cstring>
 #include "./count_frequency_char_in_str.h"
 
-TEST(Count_frequency_char_in_str, Test_Name_1) {
+TEST(Count_frequency_char_in_str, count_a_character_in_string) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -25,19 +25,78 @@ TEST(Count_frequency_char_in_str, Test_Name_1) {
     }
 }
 
-TEST(Count_frequency_char_in_str, Test_Name_2) {
+TEST(Count_frequency_char_in_str, count_a_missing_character_in_string) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    char str[] = "aababas";
+    char ch = 'z';
+
+    int count = getCountFreqCharInStr(str, ch);
+
+    if (rank == 0) {
+        int seqCount = 0;
+        int length = strlen(str);
+        for (int i = 0; i < length; ++i) {
+            if (str[i] == ch)
+                seqCount++;
+        }
+        ASSERT_EQ(seqCount, count);
+    }
+}
+
+TEST(Count_frequency_char_in_str, count_character_in_string_containing_only_that_character) {
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    char str[] = "aaaaaaa";
+    char ch = 'a';
+
+    int count = getCountFreqCharInStr(str, ch);
+
+    if (rank == 0) {
+        int seqCount = 0;
+        int length = strlen(str);
+        for (int i = 0; i < length; ++i) {
+            if (str[i] == ch)
+                seqCount++;
+        }
+        ASSERT_EQ(seqCount, count);
+    }
+}
+
+TEST(Count_frequency_char_in_str, can_create_random_string) {
     int size = 10;
     char *str = new char[size];
     ASSERT_NO_THROW(getRandomStr(str, size));
+}
+
+TEST(Count_frequency_char_in_str, throw_when_create_random_string_with_negative_size) {
+    int size = -5;
+    char *str = new char[5];
+    ASSERT_ANY_THROW(getRandomStr(str, size));
+}
+
+TEST(Count_frequency_char_in_str, count_character_in_random_string) {
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    int size = 10;
+    char *str = new char[size];
+    char ch = 'a';
+
+    getRandomStr(str, size);
+
+    int count = getCountFreqCharInStr(str, ch);
 
     if (rank == 0) {
+        int seqCount = 0;
         int length = strlen(str);
-        std::cout << "Size: " << size << " Len: " << length << " Str: ";
         for (int i = 0; i < length; ++i) {
-            std::cout << str[i];
+            if (str[i] == ch)
+                seqCount++;
         }
+        ASSERT_EQ(seqCount, count);
     }
 }
 
