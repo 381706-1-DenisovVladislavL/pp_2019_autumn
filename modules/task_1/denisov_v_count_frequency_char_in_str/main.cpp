@@ -1,7 +1,6 @@
 // Copyright 2019 Denisov Vladislav
 #include <gtest-mpi-listener.hpp>
 #include <gtest/gtest.h>
-#include <stdio.h>
 #include <cstring>
 #include "./count_frequency_char_in_str.h"
 
@@ -60,7 +59,6 @@ TEST(Count_frequency_char_in_str, count_character_in_string_containing_only_that
             if (str[i] == ch)
                 seqCount++;
         }
-        std::cout << "Test count: " << count << std::endl;
         ASSERT_EQ(seqCount, count);
     }
 }
