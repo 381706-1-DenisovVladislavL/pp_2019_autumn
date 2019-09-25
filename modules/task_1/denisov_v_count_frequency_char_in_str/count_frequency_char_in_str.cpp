@@ -54,7 +54,6 @@ int getCountFreqCharInStr(char* str, char ch) {
         if (strLocal[i] == chLocal)
             count++;
     }
-    
     std::cout << "rank: " << rank << " count: " << count << std::endl;
 
     MPI_Barrier(MPI_COMM_WORLD);
