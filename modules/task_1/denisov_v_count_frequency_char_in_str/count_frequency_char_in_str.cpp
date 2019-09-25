@@ -53,7 +53,6 @@ int getCountFreqCharInStr(char* str, char ch) {
         if (strLocal[i] == chLocal)
             count++;
     }
-    
     MPI_Barrier(MPI_COMM_WORLD);
 
     if (rank == 0) {
