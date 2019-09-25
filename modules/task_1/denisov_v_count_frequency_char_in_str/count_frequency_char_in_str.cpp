@@ -7,11 +7,11 @@
 #include "../../../modules/task_1/denisov_v_count_frequency_char_in_str/count_frequency_char_in_str.h"
 
 void getRandomStr(char *str, int strSize) {
-	const char arr[] = "abcdefghijklmnopqrstuvwxyz";
-	
-	if (strSize <= 0)
-		throw "Error size str";
-	
+    const char arr[] = "abcdefghijklmnopqrstuvwxyz";
+    
+    if (strSize <= 0)
+        throw "Error size str";
+    
     for (int i = 0; i < strSize; ++i) {
         str[i] = arr[rand() % (sizeof(arr) - 1)];
     }

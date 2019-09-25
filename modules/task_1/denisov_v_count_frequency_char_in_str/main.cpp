@@ -28,16 +28,16 @@ TEST(Count_frequency_char_in_str, Test_Name_1) {
 TEST(Count_frequency_char_in_str, Test_Name_2) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-	
-	int size = 10;
+    
+    int size = 10;
     char *str = new char[size];
-	ASSERT_NO_THROW(getRandomStr(str, size));
+    ASSERT_NO_THROW(getRandomStr(str, size));
 
     if (rank == 0) {
         int length = strlen(str);
-		std::cout << "Size: " << size << " Len: " << length << " Str: ";
+        std::cout << "Size: " << size << " Len: " << length << " Str: ";
         for (int i = 0; i < length; ++i) {
-			std::cout << str[i];
+            std::cout << str[i];
         }
     }
 }
