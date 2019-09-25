@@ -49,7 +49,7 @@ int getCountFreqCharInStr(char* str, char ch) {
     }
 
     int count = 0;
-    for (int i = 0; i <= static_cast<int>(strlen(strLocal)); i++) {
+    for (int i = 0; i < static_cast<int>(strlen(strLocal)); i++) {
         if (strLocal[i] == chLocal)
             count++;
     }
