@@ -2,8 +2,6 @@
 #ifndef MODULES_TASK_1_DENISOV_V_COUNT_FREQUENCY_CHAR_IN_STR_COUNT_FREQUENCY_CHAR_IN_STR_H_
 #define MODULES_TASK_1_DENISOV_V_COUNT_FREQUENCY_CHAR_IN_STR_COUNT_FREQUENCY_CHAR_IN_STR_H_
 
-#include <string>
-
 void getRandomStr(char* str, int strSize);
 int getCountFreqCharInStr(char* str, char ch);
 
