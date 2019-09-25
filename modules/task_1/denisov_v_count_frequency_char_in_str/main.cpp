@@ -17,7 +17,7 @@ TEST(Count_frequency_char_in_str, count_a_character_in_string) {
     if (rank == 0) {
         int seqCount = 0;
         int length = strlen(str);
-        for (int i = 0; i < length; ++i) {
+        for (int i = 0; i < length; i++) {
             if (str[i] == ch)
                 seqCount++;
         }
@@ -37,7 +37,7 @@ TEST(Count_frequency_char_in_str, count_a_missing_character_in_string) {
     if (rank == 0) {
         int seqCount = 0;
         int length = strlen(str);
-        for (int i = 0; i < length; ++i) {
+        for (int i = 0; i < length; i++) {
             if (str[i] == ch)
                 seqCount++;
         }
@@ -57,10 +57,11 @@ TEST(Count_frequency_char_in_str, count_character_in_string_containing_only_that
     if (rank == 0) {
         int seqCount = 0;
         int length = strlen(str);
-        for (int i = 0; i < length; ++i) {
+        for (int i = 0; i < length; i++) {
             if (str[i] == ch)
                 seqCount++;
         }
+        std::cout << "Test count: " << count << std::endl;
         ASSERT_EQ(seqCount, count);
     }
 }
@@ -92,7 +93,7 @@ TEST(Count_frequency_char_in_str, count_character_in_random_string) {
     if (rank == 0) {
         int seqCount = 0;
         int length = strlen(str);
-        for (int i = 0; i < length; ++i) {
+        for (int i = 0; i < length; i++) {
             if (str[i] == ch)
                 seqCount++;
         }
