@@ -53,7 +53,6 @@ TEST(Count_frequency_char_in_str, count_character_in_string_containing_only_that
     char ch = 'a';
 
     int count = getCountFreqCharInStr(str, ch);
-
     if (rank == 0) {
         int seqCount = 0;
         int length = strlen(str);
