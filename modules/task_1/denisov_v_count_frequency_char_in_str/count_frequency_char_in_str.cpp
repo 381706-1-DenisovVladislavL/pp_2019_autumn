@@ -8,10 +8,10 @@
 
 void getRandomStr(char *str, int strSize) {
     const char arr[] = "abcdefghijklmnopqrstuvwxyz";
-    
+	
     if (strSize <= 0)
         throw "Error size str";
-    
+	
     for (int i = 0; i < strSize; ++i) {
         str[i] = arr[rand() % (sizeof(arr) - 1)];
     }
