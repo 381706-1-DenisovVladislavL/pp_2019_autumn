@@ -31,10 +31,6 @@ int getCountFreqCharInStr(char* str, char ch) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    if (strlen(str) < size) {
-        return countFreqSeq(str, ch);
-    }
-
     int delta = strlen(str) / size;
     int remainder = strlen(str) % size;
 
@@ -76,6 +72,8 @@ int getCountFreqCharInStr(char* str, char ch) {
 
     if (delta != 0) {
         MPI_Reduce(&localCount, &globalCount, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+    } else {
+        globalCount = localCount;
     }
 
     delete[] strLocal;
