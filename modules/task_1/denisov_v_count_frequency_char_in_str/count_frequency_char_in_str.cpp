@@ -20,8 +20,8 @@ int getCountFreqCharInStr(char* str, char ch) {
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    const int delta = strlen(str) / size;
-    const int remainder = strlen(str) % size;
+    int delta = strlen(str) / size;
+    int remainder = strlen(str) % size;
 
     if (rank == 0) {
         for (int proc = 1; proc < size; proc++) {
