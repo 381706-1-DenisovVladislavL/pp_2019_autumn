@@ -14,12 +14,7 @@ TEST(Count_frequency_char_in_str, count_a_character_in_string) {
     int count = getCountFreqCharInStr(str, ch);
 
     if (rank == 0) {
-        int seqCount = 0;
-        int length = strlen(str);
-        for (int i = 0; i < length; i++) {
-            if (str[i] == ch)
-                seqCount++;
-        }
+        int seqCount = countFreqSeq(str, ch);
         ASSERT_EQ(seqCount, count);
     }
 }
@@ -34,12 +29,7 @@ TEST(Count_frequency_char_in_str, count_a_missing_character_in_string) {
     int count = getCountFreqCharInStr(str, ch);
 
     if (rank == 0) {
-        int seqCount = 0;
-        int length = strlen(str);
-        for (int i = 0; i < length; i++) {
-            if (str[i] == ch)
-                seqCount++;
-        }
+        int seqCount = countFreqSeq(str, ch);
         ASSERT_EQ(seqCount, count);
     }
 }
@@ -53,12 +43,7 @@ TEST(Count_frequency_char_in_str, count_character_in_string_containing_only_that
 
     int count = getCountFreqCharInStr(str, ch);
     if (rank == 0) {
-        int seqCount = 0;
-        int length = strlen(str);
-        for (int i = 0; i < length; i++) {
-            if (str[i] == ch)
-                seqCount++;
-        }
+        int seqCount = countFreqSeq(str, ch);
         ASSERT_EQ(seqCount, count);
     }
 }
@@ -80,7 +65,7 @@ TEST(Count_frequency_char_in_str, count_character_in_random_string) {
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     int size = 10;
-    char *str = new char[size];
+    char *str = new char[size + 1];
     char ch = 'a';
 
     getRandomStr(str, size);
@@ -88,12 +73,7 @@ TEST(Count_frequency_char_in_str, count_character_in_random_string) {
     int count = getCountFreqCharInStr(str, ch);
 
     if (rank == 0) {
-        int seqCount = 0;
-        int length = strlen(str);
-        for (int i = 0; i < length; i++) {
-            if (str[i] == ch)
-                seqCount++;
-        }
+        int seqCount = countFreqSeq(str, ch);
         ASSERT_EQ(seqCount, count);
     }
 }
