@@ -75,7 +75,6 @@ int getCountFreqCharInStr(char* str, char ch) {
     } else {
         globalCount = localCount;
     }
-
     delete[] strLocal;
 
     return globalCount;
