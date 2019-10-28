@@ -1,6 +1,7 @@
 // Copyright 2019 Denisov Vladislav
 #include <mpi.h>
 #include <random>
+#include <ctime>
 #include <vector>
 #include <iostream>
 #include "../../../modules/task_2/denisov_v_matrix_mult_horiz_schem_only_A/matrix_mult_horiz_schem_only_A.h"
@@ -9,10 +10,13 @@ std::vector <int> createRandomMatrix(int sizeSide) {
     if (sizeSide <= 0)
         throw "Error size of matrix";
 
+    std::mt19937 generator;
+    generator.seed(static_cast<unsigned int>(time(0)));
+
     int sizeVector = sizeSide * sizeSide;
     std::vector <int> matrix(sizeVector);
     for (int i = 0; i < sizeVector; i++)
-        matrix[i] = static_cast<int>(rand() % 10);
+        matrix[i] = generator() % 10;
 
     return matrix;
 }

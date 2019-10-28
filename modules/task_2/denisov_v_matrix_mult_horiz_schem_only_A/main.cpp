@@ -2,6 +2,7 @@
 #include <gtest-mpi-listener.hpp>
 #include <gtest/gtest.h>
 #include "./matrix_mult_horiz_schem_only_A.h"
+#include <vector>
 
 // TEST(matrix_mult_horiz_schem_only_A, test_1) {
     // int rank;
