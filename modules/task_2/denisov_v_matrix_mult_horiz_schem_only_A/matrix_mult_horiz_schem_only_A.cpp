@@ -12,7 +12,7 @@ std::vector <int> createRandomMatrix(int sizeSide) {
     int sizeVector = sizeSide * sizeSide;
     std::vector <int> matrix(sizeVector);
     for (int i = 0; i < sizeVector; i++)
-        matrix[i] = (int)(rand() % 10);
+        matrix[i] = static_cast<int>(rand() % 10);
 
     return matrix;
 }
