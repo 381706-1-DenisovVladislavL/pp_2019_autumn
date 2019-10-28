@@ -13,7 +13,7 @@ std::vector <int> createRandomMatrix(int sizeSide) {
     std::mt19937 generator;
     generator.seed(static_cast<unsigned int>(time(0)));
 
-    unsigned int sizeVector = static_cast<unsigned int>(sizeSide * sizeSide);
+    int sizeVector = sizeSide * sizeSide;
     std::vector <int> matrix(sizeVector);
     for (auto i = 0; i < sizeVector; i++)
         matrix[i] = generator() % 10;
@@ -25,8 +25,8 @@ std::vector<int> getMatrixMultSeq(std::vector<int> matrixA, std::vector<int> mat
     if (sizeSide <= 0)
         throw "Error size of matrix";
 
-    unsigned int sizeVector = static_cast<unsigned int>(sizeSide * sizeSide);
-    if (matrixA.size() != sizeVector || matrixB.size() != sizeVector)
+    int sizeVector = sizeSide * sizeSide;
+    if (matrixA.size() != static_cast<int>(sizeVector) || matrixB.size() != static_cast<int>(sizeVector))
         throw "One or both matrices do not exist";
 
     if (matrixA.size() != matrixB.size())
