@@ -1,8 +1,8 @@
 // Copyright 2019 Denisov Vladislav
 #include <gtest-mpi-listener.hpp>
 #include <gtest/gtest.h>
-#include "./matrix_mult_horiz_schem_only_A.h"
 #include <vector>
+#include "./matrix_mult_horiz_schem_only_A.h"
 
 // TEST(matrix_mult_horiz_schem_only_A, test_1) {
     // int rank;
