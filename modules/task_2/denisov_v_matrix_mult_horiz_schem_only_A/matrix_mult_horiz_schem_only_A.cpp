@@ -26,7 +26,8 @@ std::vector<int> getMatrixMultSeq(std::vector<int> matrixA, std::vector<int> mat
         throw "Error size of matrix";
 
     int sizeVector = sizeSide * sizeSide;
-    if (matrixA.size() != static_cast<unsigned int>(sizeVector) || matrixB.size() != static_cast<unsigned int>(sizeVector))
+    if (matrixA.size() != static_cast<unsigned int>(sizeVector) || 
+        matrixB.size() != static_cast<unsigned int>(sizeVector))
         throw "One or both matrices do not exist";
 
     if (matrixA.size() != matrixB.size())
