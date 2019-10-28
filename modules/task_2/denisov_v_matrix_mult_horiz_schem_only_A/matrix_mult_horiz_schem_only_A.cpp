@@ -15,7 +15,7 @@ std::vector <int> createRandomMatrix(int sizeSide) {
 
     unsigned int sizeVector = static_cast<unsigned int>(sizeSide * sizeSide);
     std::vector <int> matrix(sizeVector);
-    for (size_t i = 0; i < sizeVector; i++)
+    for (auto i = 0; i < sizeVector; i++)
         matrix[i] = generator() % 10;
 
     return matrix;
@@ -34,10 +34,10 @@ std::vector<int> getMatrixMultSeq(std::vector<int> matrixA, std::vector<int> mat
 
     std::vector<int> matrixResult(sizeVector);
 
-    for (size_t i = 0; i < sizeSide; ++i) {
-        for (size_t j = 0; j < sizeSide; ++j) {
+    for (auto i = 0; i < sizeSide; ++i) {
+        for (auto j = 0; j < sizeSide; ++j) {
             matrixResult[i * sizeSide + j] = 0;
-            for (int k = 0; k < sizeSide; ++k) {
+            for (auto k = 0; k < sizeSide; ++k) {
                 matrixResult[i * sizeSide + j] += matrixA[i * sizeSide + k] * matrixB[k * sizeSide + j];
             }
         }
@@ -57,8 +57,8 @@ void printMatrix(std::vector<int> matrix, int sizeSide) {
         return;
     }
 
-    for (size_t i = 0; i < sizeSide; ++i) {
-        for (size_t j = 0; j < sizeSide; ++j) {
+    for (auto i = 0; i < sizeSide; ++i) {
+        for (auto j = 0; j < sizeSide; ++j) {
             std::cout << matrix[i * sizeSide + j] << " ";
         }
         std::cout << std::endl;
