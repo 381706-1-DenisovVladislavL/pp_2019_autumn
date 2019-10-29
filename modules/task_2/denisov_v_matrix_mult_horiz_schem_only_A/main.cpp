@@ -4,7 +4,7 @@
 #include <vector>
 #include "./matrix_mult_horiz_schem_only_A.h"
 
- TEST(matrix_mult_horiz_schem_only_A, test_1) {
+TEST(matrix_mult_horiz_schem_only_A, test_1) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -18,7 +18,7 @@
         std::vector<int> resultSeq = getMatrixMultSeq(matrixA, matrixB, sizeSide);
         ASSERT_EQ(resultSeq, resultPar);
     }
- }
+}
 
 // TEST(matrix_mult_horiz_schem_only_A, test_print) {
 //    int rank;
