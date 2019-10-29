@@ -84,7 +84,7 @@ std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> mat
 
     if (rank == 0) {
         resultLocal.resize(sizeSide * (delta + remainder));
-        
+
         for (auto i = 0; i < delta + remainder; ++i) {
             for (auto j = 0; j < sizeSide; ++j) {
                 resultLocal[i * sizeSide + j] = 0;
@@ -105,9 +105,7 @@ std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> mat
         }
     }
 
-    // std::cout << rank << ": I'm get BARRIER\n";
     MPI_Barrier(MPI_COMM_WORLD);
-    // std::cout << rank << ": I'm left BARRIER\n";
 
     if (rank == 0) {
         if (delta != 0) {
