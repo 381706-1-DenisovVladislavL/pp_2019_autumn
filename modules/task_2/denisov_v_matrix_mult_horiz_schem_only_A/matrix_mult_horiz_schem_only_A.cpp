@@ -120,7 +120,7 @@ std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> mat
         }
     } else {
         if (delta != 0) {
-            MPI_Send(&resultLocal[0], delta * sizeSide, MPI_INT, 0, 2, MPI_COMM_WORLD); 
+            MPI_Send(&resultLocal[0], delta * sizeSide, MPI_INT, 0, 2, MPI_COMM_WORLD);
         }
     }
 
