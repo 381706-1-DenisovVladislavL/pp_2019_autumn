@@ -47,8 +47,87 @@ std::vector<int> getMatrixMultSeq(std::vector<int> matrixA, std::vector<int> mat
     return matrixResult;
 }
 
-// std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> matrixB, int sizeSide) {
-// }
+std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> matrixB, int sizeSide) {
+    int size, rank;
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    int sizeVector = sizeSide * sizeSide;
+    int delta = sizeSide / size;
+    int remainder = sizeSide % size;
+
+    std::vector<int> vectorLocal(delta * sizeSide);
+    std::vector<int> resultGlobal(sizeVector);
+
+    if (rank == 0) {
+        vectorLocal.resize(sizeSide * (delta + remainder));
+        if (delta != 0) {
+            for (int proc = 1; proc < size; proc++) {
+                MPI_Send(&matrixA[0] + proc * delta * sizeSide + remainder * sizeSide,
+                    delta * sizeSide, MPI_INT, proc, 1, MPI_COMM_WORLD);
+            }
+        }
+    }
+
+    if (rank == 0) {
+        for (int i = 0; i < sizeSide * (delta + remainder); i++) {
+            vectorLocal[i] = matrixA[i];
+        }
+    } else {
+        MPI_Status status;
+        if (delta != 0) {
+            MPI_Recv(&vectorLocal[0], delta * sizeSide, MPI_INT, 0, 1, MPI_COMM_WORLD, &status);
+        }
+    }
+
+    std::vector<int> resultLocal(sizeSide * delta);
+
+    if (rank == 0) {
+        resultLocal.resize(sizeSide * (delta + remainder));
+        
+        for (auto i = 0; i < delta + remainder; ++i) {
+            for (auto j = 0; j < sizeSide; ++j) {
+                resultLocal[i * sizeSide + j] = 0;
+                for (auto k = 0; k < sizeSide; ++k) {
+                    resultLocal[i * sizeSide + j] += vectorLocal[i * sizeSide + k] * matrixB[k * sizeSide + j];
+                }
+            }
+        }
+
+    } else {
+        for (auto i = 0; i < delta; ++i) {
+            for (auto j = 0; j < sizeSide; ++j) {
+                resultLocal[i * sizeSide + j] = 0;
+                for (auto k = 0; k < sizeSide; ++k) {
+                    resultLocal[i * sizeSide + j] += vectorLocal[i * sizeSide + k] * matrixB[k * sizeSide + j];
+                }
+            }
+        }
+    }
+
+    // std::cout << rank << ": I'm get BARRIER\n";
+    MPI_Barrier(MPI_COMM_WORLD);
+    // std::cout << rank << ": I'm left BARRIER\n";
+
+    if (rank == 0) {
+        if (delta != 0) {
+            MPI_Status status;
+            for (int proc = 1; proc < size; proc++) {
+                MPI_Recv(&resultGlobal[0] + proc * delta * sizeSide + remainder * sizeSide,
+                    delta * sizeSide, MPI_INT, proc, 2, MPI_COMM_WORLD, &status);
+            }
+        }
+        for (int i = 0; i < sizeSide * (delta + remainder); i++) {
+            resultGlobal[i] = resultLocal[i];
+        }
+    } else {
+        if (delta != 0) {
+            MPI_Send(&resultLocal[0], delta * sizeSide, MPI_INT, 0, 2, MPI_COMM_WORLD); 
+        }
+    }
+
+    return resultGlobal;
+}
 
 void printMatrix(std::vector<int> matrix, int sizeSide) {
     std::cout << "\nPrint Matrix:" << std::endl;

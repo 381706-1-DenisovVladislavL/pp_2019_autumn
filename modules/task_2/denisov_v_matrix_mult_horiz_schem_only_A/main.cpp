@@ -5,28 +5,34 @@
 #include "./matrix_mult_horiz_schem_only_A.h"
 
 // TEST(matrix_mult_horiz_schem_only_A, test_1) {
-    // int rank;
-    // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-    // char str[] = "aababas";
-    // char ch = 'a';
-
-    // int count = getCountFreqCharInStr(str, ch);
-
-    // if (rank == 0) {
-        // int seqCount = countFreqSeq(str, ch);
-        // ASSERT_EQ(seqCount, count);
-    // }
+//    int rank;
+//    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+//
+//    int sizeSide = 3;
+//    std::vector<int> matrixA = createRandomMatrix(sizeSide);
+//    std::vector<int> matrixB = createRandomMatrix(sizeSide);
+//
+//    std::vector<int> resultPar = getMatrixMultPar(matrixA, matrixB, sizeSide);
+//
+//    if (rank == 0) {
+//
+//        std::vector<int> resultSeq = getMatrixMultSeq(matrixA, matrixB, sizeSide);
+//        printMatrix(matrixA, sizeSide);
+//        printMatrix(matrixB, sizeSide);
+//        printMatrix(resultPar, sizeSide);
+//        printMatrix(resultSeq, sizeSide);
+//        ASSERT_EQ(seqCount, count);
+//    }
 // }
 
-TEST(matrix_mult_horiz_schem_only_A, test_print) {
-    int rank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-
-    int sizeSide = 3;
-    std::vector<int> matrix = createRandomMatrix(sizeSide);
-    printMatrix(matrix, sizeSide);
-}
+// TEST(matrix_mult_horiz_schem_only_A, test_print) {
+//    int rank;
+//    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+//
+//    int sizeSide = 3;
+//    std::vector<int> matrix = createRandomMatrix(sizeSide);
+//    printMatrix(matrix, sizeSide);
+// }
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
