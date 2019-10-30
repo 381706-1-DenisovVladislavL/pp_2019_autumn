@@ -8,8 +8,9 @@ TEST(matrix_mult_horiz_schem_only_A, throw_when_create_random_matrix_with_negati
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    if (rank == 0)
+    if (rank == 0) {
         ASSERT_ANY_THROW(createRandomMatrix(-1));
+    }
 }
 
 TEST(matrix_mult_horiz_schem_only_A, throw_when_seq_mult_matrix_with_negative_size) {
@@ -19,8 +20,9 @@ TEST(matrix_mult_horiz_schem_only_A, throw_when_seq_mult_matrix_with_negative_si
     std::vector<int> matrixA(1);
     std::vector<int> matrixB(1);
 
-    if (rank == 0)
+    if (rank == 0) {
         ASSERT_ANY_THROW(getMatrixMultSeq(matrixA, matrixB, -1));
+    }
 }
 
 TEST(matrix_mult_horiz_schem_only_A, throw_when_par_mult_matrix_with_negative_size) {
@@ -30,8 +32,9 @@ TEST(matrix_mult_horiz_schem_only_A, throw_when_par_mult_matrix_with_negative_si
     std::vector<int> matrixA(1);
     std::vector<int> matrixB(1);
 
-    if (rank == 0)
+    if (rank == 0) {
         ASSERT_ANY_THROW(getMatrixMultPar(matrixA, matrixB, -1));
+    }
 }
 
 TEST(matrix_mult_horiz_schem_only_A, throw_when_seq_mult_matrix_with_incorrect_size_parameter) {
@@ -41,8 +44,9 @@ TEST(matrix_mult_horiz_schem_only_A, throw_when_seq_mult_matrix_with_incorrect_s
     std::vector<int> matrixA(1);
     std::vector<int> matrixB(2);
 
-    if (rank == 0)
+    if (rank == 0) {
         ASSERT_ANY_THROW(getMatrixMultSeq(matrixA, matrixB, 1));
+    }
 }
 
 TEST(matrix_mult_horiz_schem_only_A, throw_when_par_mult_matrix_with_incorrect_size_parameter) {
@@ -52,8 +56,9 @@ TEST(matrix_mult_horiz_schem_only_A, throw_when_par_mult_matrix_with_incorrect_s
     std::vector<int> matrixA(1);
     std::vector<int> matrixB(2);
 
-    if (rank == 0)
+    if (rank == 0) {
         ASSERT_ANY_THROW(getMatrixMultPar(matrixA, matrixB, 1));
+    }
 }
 
 TEST(matrix_mult_horiz_schem_only_A, check_correct_seq_mult_matrix) {
