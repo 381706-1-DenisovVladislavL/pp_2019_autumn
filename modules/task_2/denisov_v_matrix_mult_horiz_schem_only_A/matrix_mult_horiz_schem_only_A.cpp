@@ -28,10 +28,7 @@ std::vector<int> getMatrixMultSeq(std::vector<int> matrixA, std::vector<int> mat
     int sizeVector = sizeSide * sizeSide;
     if (matrixA.size() != static_cast<unsigned int>(sizeVector) ||
         matrixB.size() != static_cast<unsigned int>(sizeVector))
-        throw "One or both matrices do not exist";
-
-    if (matrixA.size() != matrixB.size())
-        throw "These 2 matrices cannot be multiplied.";
+        throw "The dimensions of the matrices do not correspond to the parameter passed";
 
     std::vector<int> matrixResult(sizeVector);
 
@@ -48,11 +45,18 @@ std::vector<int> getMatrixMultSeq(std::vector<int> matrixA, std::vector<int> mat
 }
 
 std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> matrixB, int sizeSide) {
+    if (sizeSide <= 0)
+        throw "Error size of matrix";
+
+    int sizeVector = sizeSide * sizeSide;
+    if (matrixA.size() != static_cast<unsigned int>(sizeVector) ||
+        matrixB.size() != static_cast<unsigned int>(sizeVector))
+        throw "The dimensions of the matrices do not correspond to the parameter passed.";
+
     int size, rank;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    int sizeVector = sizeSide * sizeSide;
     int delta = sizeSide / size;
     int remainder = sizeSide % size;
 
