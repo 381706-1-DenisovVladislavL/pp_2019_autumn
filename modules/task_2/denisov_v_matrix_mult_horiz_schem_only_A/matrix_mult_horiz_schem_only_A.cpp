@@ -70,7 +70,7 @@ std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> mat
         if (remainder != 0) {
             vectorLocal.resize(sizeSide * delta + remainder * sizeSide);
         }
-        if (delta != sizeSide) {
+        if (delta != 0) {
             for (int proc = 1; proc < size; proc++) {
                 MPI_Send(&matrixA[0] + proc * delta * sizeSide + remainder * sizeSide,
                     delta * sizeSide, MPI_INT, proc, 1, MPI_COMM_WORLD);
@@ -90,7 +90,7 @@ std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> mat
         }
     } else {
         MPI_Status status;
-        if (delta != sizeSide) {
+        if (delta != 0) {
             MPI_Recv(&vectorLocal[0], delta * sizeSide, MPI_INT, 0, 1, MPI_COMM_WORLD, &status);
         }
     }
@@ -111,7 +111,7 @@ std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> mat
             }
         }
     } else {
-        if (delta != sizeSide) {
+        if (delta != 0) {
             for (int i = 0; i < delta; i++) {
                 for (int j = 0; j < sizeSide; j++) {
                     resultLocal[i * sizeSide + j] = 0;
@@ -124,7 +124,7 @@ std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> mat
     }
 
     if (rank == 0) {
-        if (delta != sizeSide) {
+        if (delta != 0) {
             MPI_Status status;
             for (int proc = 1; proc < size; proc++) {
                 MPI_Recv(&resultGlobal[0] + proc * delta * sizeSide + remainder * sizeSide,
@@ -141,7 +141,7 @@ std::vector<int> getMatrixMultPar(std::vector<int> matrixA, std::vector<int> mat
             }
         }
     } else {
-        if (delta != sizeSide) {
+        if (delta != 0) {
             MPI_Send(&resultLocal[0], delta * sizeSide, MPI_INT, 0, 2, MPI_COMM_WORLD);
         }
     }
