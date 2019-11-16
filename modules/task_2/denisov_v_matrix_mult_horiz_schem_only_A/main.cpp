@@ -113,6 +113,7 @@ TEST(matrix_mult_horiz_schem_only_A, check_correct_par_mult_matrix_1size) {
 
 TEST(matrix_mult_horiz_schem_only_A, check_correct_par_mult_matrix_even_size) {
     int rank;
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     int sizeSide = 20;
@@ -135,6 +136,7 @@ TEST(matrix_mult_horiz_schem_only_A, check_correct_par_mult_matrix_even_size) {
 
 TEST(matrix_mult_horiz_schem_only_A, check_correct_par_mult_matrix_odd_size) {
     int rank;
+    MPI_Barrier(MPI_COMM_WORLD);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     int sizeSide = 15;
