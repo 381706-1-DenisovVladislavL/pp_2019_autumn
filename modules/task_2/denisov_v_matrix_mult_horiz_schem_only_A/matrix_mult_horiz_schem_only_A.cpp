@@ -11,7 +11,7 @@ std::vector <int> createRandomMatrix(int sizeSide) {
         throw "Error size of matrix";
 
     std::default_random_engine generator;
-    generator.seed(sizeSide);
+    generator.seed(static_cast<unsigned int>(time(0)));
 
     int sizeVector = sizeSide * sizeSide;
     std::vector <int> matrix(sizeVector);
