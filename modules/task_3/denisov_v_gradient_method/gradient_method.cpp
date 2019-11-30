@@ -134,7 +134,7 @@ std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> 
 
         // Norma neviazki
         check = sqrt(vectorMult(rnext, rnext));
-        
+
         for (int j = 0; j < size; j++)
             p[j] = beta * p[j] + rnext[j];
 
