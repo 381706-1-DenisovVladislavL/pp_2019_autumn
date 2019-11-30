@@ -8,11 +8,14 @@
 std::vector<double> createRandomMatrix(int sizeSide);
 std::vector<double> createRandomVector(int size);
 
-double vectorMult(const std::vector<double>& vectorA, const std::vector<double>& vectorB);
-void matrixVectorMult(const std::vector<double>& matrix, const std::vector<double>& vector, std::vector<double>& result);
+double vectorMult(std::vector<double>& vectorA, std::vector<double>& vectorB);
+void matrixVectorMult(std::vector<double>& matrix, std::vector<double>& vector, 
+    std::vector<double>& result);
 
-std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> vector, int sizeSide);
-// std::vector<int> getSolvePar(std::vector<double> matrixA, std::vector<double> vectorB, int sizeSide);
+std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> vector, 
+    int sizeSide);
+// std::vector<int> getSolvePar(std::vector<double> matrixA, std::vector<double> vectorB, 
+//    int sizeSide);
 
 void printMatrix(std::vector<double>& matrix, int size);
 void printVector(std::vector<double>& vector, int size);
