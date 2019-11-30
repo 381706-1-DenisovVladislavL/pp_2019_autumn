@@ -39,7 +39,7 @@ std::vector<double> createRandomVector(int size) {
     return vector;
 }
 
-void printMatrix(std::vector<double>& matrix, int size) {
+void printMatrix(std::vector<double> matrix, int size) {
     std::cout << "\nPrint Matrix:" << std::endl;
 
     if (size > 10) {
@@ -56,7 +56,7 @@ void printMatrix(std::vector<double>& matrix, int size) {
     std::cout << std::endl;
 }
 
-void printVector(std::vector<double>& vector, int size) {
+void printVector(std::vector<double> vector, int size) {
     std::cout << "\nPrint Vector:" << std::endl;
 
     if (size > 10) {
@@ -69,7 +69,7 @@ void printVector(std::vector<double>& vector, int size) {
     }
 }
 
-void printSystem(std::vector<double>& matrix, std::vector<double>& vector, int size) {
+void printSystem(std::vector<double> matrix, std::vector<double> vector, int size) {
     std::cout << "\nPrint System:" << std::endl;
 
     if (size > 10) {
@@ -94,13 +94,16 @@ double vectorMult(const std::vector<double>& vectorA, const std::vector<double>&
     return res;
 }
 
-void matrixVectorMult(const std::vector<double>& matrix, const std::vector<double>& vector, std::vector<double>& res) {
+std::vector<double> matrixVectorMult(const std::vector<double>& matrix, const std::vector<double>& vector) {
+    std::vector<double> res(vector.size());
     for (size_t i = 0; i < vector.size(); ++i) {
         res[i] = 0.0;
         for (size_t j = 0; j < vector.size(); ++j) {
             res[i] += matrix[i * vector.size() + j] * vector[j];
         }
     }
+
+    return res;
 }
 
 std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> vector, int size) {
@@ -112,9 +115,8 @@ std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> 
         result[i] = 1;
     }
 
-    std::vector<double> Ap(size);
+    std::vector<double> Ap = matrixVectorMult(matrix, result);
     std::vector<double> rprev(size), rnext(size);;
-    matrixVectorMult(matrix, result, Ap);
     for (int i = 0; i < size; i++)
         rprev[i] = vector[i] - Ap[i];
 
@@ -122,7 +124,7 @@ std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> 
 
     do {
         iters++;
-        matrixVectorMult(matrix, p, Ap);
+        Ap = matrixVectorMult(matrix, p);
         alpha = vectorMult(rprev, rprev) / vectorMult(p, Ap);
         for (int i = 0; i < size; i++) {
             result[i] += alpha * p[i];
