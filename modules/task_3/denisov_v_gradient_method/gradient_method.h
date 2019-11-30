@@ -8,8 +8,8 @@
 std::vector<double> createRandomMatrix(int sizeSide);
 std::vector<double> createRandomVector(int size);
 
-double vectorMult(std::vector<double>& vectorA, std::vector<double>& vectorB);
-void matrixVectorMult(std::vector<double>& matrix, std::vector<double>& vector, 
+double vectorMult(const std::vector<double>& vectorA, const std::vector<double>& vectorB);
+void matrixVectorMult(const std::vector<double>& matrix, const std::vector<double>& vector, 
     std::vector<double>& result);
 
 std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> vector, 
