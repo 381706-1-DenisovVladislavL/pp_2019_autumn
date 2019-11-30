@@ -4,6 +4,49 @@
 #include <vector>
 #include "./gradient_method.h"
 
+TEST(gradient_method, try_create_random_matrix) {
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    int sizeSide = 5;
+    std::vector<double> matrix = createRandomMatrix(sizeSide);
+
+    if (rank == 0) {
+        printMatrix(matrix, sizeSide);
+    }
+}
+
+TEST(gradient_method, try_create_random_vector) {
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    int size = 5;
+    std::vector<double> vector = createRandomVector(size);
+
+    if (rank == 0) {
+        printVector(vector, size);
+    }
+}
+
+TEST(gradient_method, seq_solve) {
+    int rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    int size = 5;
+    std::vector<double> matrix = createRandomMatrix(size);
+    std::vector<double> vector = createRandomVector(size);
+
+    if (rank == 0) {
+        printSystem(matrix, vector, size);
+        double startSeq = MPI_Wtime();
+        std::vector<double> resultSeq = getSolveSeq(matrix, vector, size);
+        double endSeq = MPI_Wtime();
+        std::cout << "Time seq: " << endSeq - startSeq << std::endl;
+
+        printVector(resultSeq, size);
+    }
+}
+
 // TEST(gradient_method, throw_when_create_random_matrix_with_negative_size) {
     // int rank;
     // MPI_Comm_rank(MPI_COMM_WORLD, &rank);
