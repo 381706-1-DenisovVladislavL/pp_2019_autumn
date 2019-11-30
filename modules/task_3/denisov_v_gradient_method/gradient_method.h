@@ -13,7 +13,7 @@ std::vector<double> matrixVectorMult(const std::vector<double>& matrix, const st
 
 std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> vector,
     int sizeSide);
-// std::vector<int> getSolvePar(std::vector<double> matrixA, std::vector<double> vectorB, 
+// std::vector<int> getSolvePar(std::vector<double> matrixA, std::vector<double> vectorB,
 //    int sizeSide);
 
 void printMatrix(std::vector<double> matrix, int size);
