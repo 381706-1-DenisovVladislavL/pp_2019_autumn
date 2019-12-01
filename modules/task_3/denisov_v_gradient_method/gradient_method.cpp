@@ -8,7 +8,7 @@
 
 std::vector<double> createRandomMatrix(int sizeSide) {
     if (sizeSide <= 0)
-        throw "Error size of matrix";
+        throw std::runtime_error("Error size of matrix");
 
     std::default_random_engine generator;
     generator.seed(static_cast<unsigned int>(time(0)));
@@ -26,7 +26,7 @@ std::vector<double> createRandomMatrix(int sizeSide) {
 
 std::vector<double> createRandomVector(int size) {
     if (size <= 0)
-        throw "Error size of vector";
+        throw std::runtime_error("Error size of vector");
 
     std::default_random_engine generator;
     generator.seed(static_cast<unsigned int>(time(0)));
@@ -87,6 +87,9 @@ void printSystem(std::vector<double> matrix, std::vector<double> vector, int siz
 }
 
 double vectorMult(const std::vector<double>& vectorA, const std::vector<double>& vectorB) {
+    if (vectorA.size() != vectorB.size())
+        throw std::runtime_error("The dimensions of vectors are not consistent");
+
     double res = 0.0;
     for (size_t i = 0; i < vectorA.size(); ++i)
         res += vectorA[i] * vectorB[i];
@@ -95,6 +98,9 @@ double vectorMult(const std::vector<double>& vectorA, const std::vector<double>&
 }
 
 std::vector<double> matrixVectorMult(const std::vector<double>& matrix, const std::vector<double>& vector) {
+    if (vector.size() != (matrix.size() / vector.size()))
+        throw std::runtime_error("The dimensions of the matrix and vector are not consistent");
+
     std::vector<double> res(matrix.size() / vector.size());
     for (size_t i = 0; i < (matrix.size() / vector.size()); ++i) {
         res[i] = 0.0;
@@ -107,6 +113,9 @@ std::vector<double> matrixVectorMult(const std::vector<double>& matrix, const st
 }
 
 std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> vector, int size) {
+    if (size <= 0)
+        throw "Error size";
+
     int iters = 0;
     double eps = 0.1, beta = 0.0, alpha = 0.0, check = 0.0;
 
@@ -144,8 +153,7 @@ std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> 
     return result;
 }
 
-std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> vector,
-    int sizeSide) {
+std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> vector, int sizeSide) {
     if (sizeSide <= 0)
         throw "Error size";
 
