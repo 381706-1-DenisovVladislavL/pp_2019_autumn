@@ -51,7 +51,7 @@ TEST(gradient_method, seq_solve) {
         std::cout << "Time par: " << endPar - startPar << std::endl;
         printVector(resultPar, size);
 
-        for (int i = 0; i < resultSeq.size(); ++i)
+        for (size_t i = 0; i < resultSeq.size(); ++i)
             ASSERT_NEAR(resultSeq[i], resultPar[i], 0.05);
     }
 }

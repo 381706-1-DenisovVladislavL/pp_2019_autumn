@@ -118,17 +118,17 @@ std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> 
     std::vector<double> Ah = matrixVectorMult(matrix, result);
     std::vector<double> rprev(size), rnext(size);
     for (int i = 0; i < size; i++)
-        rprev[i] = vector[i] - Ah[i]; // r^(k) = b - A * result
+        rprev[i] = vector[i] - Ah[i];  // r^(k) = b - A * result
 
-    std::vector<double> h(rprev); // h = r^(k)
+    std::vector<double> h(rprev);  // h = r^(k)
 
     do {
         iters++;
-        Ah = matrixVectorMult(matrix, h); // Ah = A * h
+        Ah = matrixVectorMult(matrix, h);  // Ah = A * h
         alpha = vectorMult(rprev, rprev) / vectorMult(h, Ah);
         for (int i = 0; i < size; i++) {
             result[i] += alpha * h[i];
-            rnext[i] = rprev[i] - alpha * Ah[i]; // r^(k+1) = r^(k)-alpha*Ah
+            rnext[i] = rprev[i] - alpha * Ah[i];  // r^(k+1) = r^(k)-alpha*Ah
         }
         beta = vectorMult(rnext, rnext) / vectorMult(rprev, rprev);
 
@@ -136,7 +136,7 @@ std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> 
         check = sqrt(vectorMult(rnext, rnext));
 
         for (int j = 0; j < size; j++)
-            h[j] = rnext[j] + beta * h[j]; // h^(k+1) = r^(k+1) + beta*h^(k)
+            h[j] = rnext[j] + beta * h[j];  // h^(k+1) = r^(k+1) + beta*h^(k)
 
         rprev = rnext;
     } while ((check > eps) && (iters <= size));
@@ -148,13 +148,13 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
     int sizeSide) {
     if (sizeSide <= 0)
         throw "Error size";
-    
+
     int comm_size, rank;
     MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    int delta = sizeSide / comm_size; // сколько каждому процессу
-    int remainder = sizeSide % comm_size; // добавка нулевому процессу
+    int delta = sizeSide / comm_size;
+    int remainder = sizeSide % comm_size;
 
     std::vector<double> matrixLocal(delta * sizeSide);
     if (rank == 0) {
@@ -203,20 +203,19 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
             rnext.resize(delta + remainder);
         }
         for (int i = 0; i < delta + remainder; i++)
-            rprev[i] = vector[i] - Ah[i]; // r^(k) = b - A * result
+            rprev[i] = vector[i] - Ah[i];  // r^(k) = b - A * result
     } else {
         for (int i = 0; i < delta; i++)
-            rprev[i] = vector[rank * delta + remainder + i] - Ah[i]; // r^(k) = b - A * result
+            rprev[i] = vector[rank * delta + remainder + i] - Ah[i];  // r^(k) = b - A * result
     }
 
-    std::vector<double> h(sizeSide); // h = r^(k)
+    std::vector<double> h(sizeSide);  // h = r^(k)
     if (rank == 0) {
         if (remainder != 0) {
             for (int i = 0; i < delta + remainder; i++) {
                 h[i] = rprev[i];
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < delta; i++) {
                 h[i] = rprev[i];
             }
@@ -237,7 +236,7 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
 
     do {
         iters++;
-        Ah = matrixVectorMult(matrixLocal, h); // Ah = A * h
+        Ah = matrixVectorMult(matrixLocal, h);  // Ah = A * h
 
         std::vector<double> hblock(delta);
         if (rank == 0) {
@@ -245,11 +244,11 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
                 hblock.resize(delta + remainder);
             }
             for (int i = 0; i < delta + remainder; i++) {
-                hblock[i] = h[i]; // r^(k+1) = r^(k)-alpha*Ah
+                hblock[i] = h[i];  // r^(k+1) = r^(k)-alpha*Ah
             }
         } else {
             for (int i = 0; i < delta; i++) {
-                hblock[i] = h[rank * delta + remainder + i]; // r^(k+1) = r^(k)-alpha*Ah
+                hblock[i] = h[rank * delta + remainder + i];  // r^(k+1) = r^(k)-alpha*Ah
             }
         }
 
@@ -264,11 +263,11 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
         }
         if (rank == 0) {
             for (int i = 0; i < delta + remainder; i++) {
-                rnext[i] = rprev[i] - alpha * Ah[i]; // r^(k+1) = r^(k)-alpha*Ah
+                rnext[i] = rprev[i] - alpha * Ah[i];  // r^(k+1) = r^(k)-alpha*Ah
             }
         } else {
             for (int i = 0; i < delta; i++) {
-                rnext[i] = rprev[i] - alpha * Ah[i]; // r^(k+1) = r^(k)-alpha*Ah
+                rnext[i] = rprev[i] - alpha * Ah[i];  // r^(k+1) = r^(k)-alpha*Ah
             }
         }
 
@@ -282,7 +281,7 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
 
         if (rank == 0) {
             for (int i = 0; i < delta + remainder; i++) {
-                h[i] = rnext[i] + beta * h[i]; // r^(k+1) = r^(k)-alpha*Ah
+                h[i] = rnext[i] + beta * h[i];  // r^(k+1) = r^(k)-alpha*Ah
             }
 
             if (delta != 0) {
@@ -292,11 +291,10 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
                         delta, MPI_DOUBLE, proc, 3, MPI_COMM_WORLD, &status);
                 }
             }
-        }
-        else {
+        } else {
             std::vector<double> hlocal(delta);
             for (int i = 0; i < delta; i++) {
-                hlocal[i] = rnext[i] + beta * h[rank * delta + remainder + i]; // r^(k+1) = r^(k)-alpha*Ah
+                hlocal[i] = rnext[i] + beta * h[rank * delta + remainder + i];  // r^(k+1) = r^(k)-alpha*Ah
             }
 
             if (delta != 0) {
@@ -309,5 +307,4 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
     } while ((check > eps) && (iters <= sizeSide));
 
     return result;
-
 }
