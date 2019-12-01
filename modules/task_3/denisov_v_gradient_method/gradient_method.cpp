@@ -98,7 +98,7 @@ double vectorMult(const std::vector<double>& vectorA, const std::vector<double>&
 }
 
 std::vector<double> matrixVectorMult(const std::vector<double>& matrix, const std::vector<double>& vector) {
-    if (vector.size() != (matrix.size() / vector.size()))
+    if (0 != (matrix.size() % vector.size()))
         throw "The dimensions of the matrix and vector are not consistent";
 
     std::vector<double> res(matrix.size() / vector.size());
