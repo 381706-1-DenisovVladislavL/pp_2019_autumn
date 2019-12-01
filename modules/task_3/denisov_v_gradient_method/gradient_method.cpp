@@ -95,8 +95,8 @@ double vectorMult(const std::vector<double>& vectorA, const std::vector<double>&
 }
 
 std::vector<double> matrixVectorMult(const std::vector<double>& matrix, const std::vector<double>& vector) {
-    std::vector<double> res(vector.size());
-    for (size_t i = 0; i < vector.size(); ++i) {
+    std::vector<double> res(matrix.size() / vector.size());
+    for (size_t i = 0; i < (matrix.size() / vector.size()); ++i) {
         res[i] = 0.0;
         for (size_t j = 0; j < vector.size(); ++j) {
             res[i] += matrix[i * vector.size() + j] * vector[j];
@@ -115,20 +115,20 @@ std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> 
         result[i] = 1;
     }
 
-    std::vector<double> Ap = matrixVectorMult(matrix, result);
-    std::vector<double> rprev(size), rnext(size);;
+    std::vector<double> Ah = matrixVectorMult(matrix, result);
+    std::vector<double> rprev(size), rnext(size);
     for (int i = 0; i < size; i++)
-        rprev[i] = vector[i] - Ap[i];
+        rprev[i] = vector[i] - Ah[i]; // r^(k) = b - A * result
 
-    std::vector<double> p(rprev);
+    std::vector<double> h(rprev); // h = r^(k)
 
     do {
         iters++;
-        Ap = matrixVectorMult(matrix, p);
-        alpha = vectorMult(rprev, rprev) / vectorMult(p, Ap);
+        Ah = matrixVectorMult(matrix, h); // Ah = A * h
+        alpha = vectorMult(rprev, rprev) / vectorMult(h, Ah);
         for (int i = 0; i < size; i++) {
-            result[i] += alpha * p[i];
-            rnext[i] = rprev[i] - alpha * Ap[i];
+            result[i] += alpha * h[i];
+            rnext[i] = rprev[i] - alpha * Ah[i]; // r^(k+1) = r^(k)-alpha*Ah
         }
         beta = vectorMult(rnext, rnext) / vectorMult(rprev, rprev);
 
@@ -136,10 +136,178 @@ std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> 
         check = sqrt(vectorMult(rnext, rnext));
 
         for (int j = 0; j < size; j++)
-            p[j] = beta * p[j] + rnext[j];
+            h[j] = rnext[j] + beta * h[j]; // h^(k+1) = r^(k+1) + beta*h^(k)
 
         rprev = rnext;
     } while ((check > eps) && (iters <= size));
 
     return result;
+}
+
+std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> vector,
+    int sizeSide) {
+    if (sizeSide <= 0)
+        throw "Error size";
+    
+    int comm_size, rank;
+    MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    int delta = sizeSide / comm_size; // сколько каждому процессу
+    int remainder = sizeSide % comm_size; // добавка нулевому процессу
+
+    std::vector<double> matrixLocal(delta * sizeSide);
+    if (rank == 0) {
+        if (remainder != 0) {
+            matrixLocal.resize(sizeSide * delta + remainder * sizeSide);
+        }
+        if (delta != 0) {
+            for (int proc = 1; proc < comm_size; proc++) {
+                MPI_Send(&matrix[0] + proc * delta * sizeSide + remainder * sizeSide,
+                    delta * sizeSide, MPI_DOUBLE, proc, 1, MPI_COMM_WORLD);
+            }
+        }
+    }
+
+    if (rank == 0) {
+        if (remainder != 0) {
+            for (int i = 0; i < sizeSide * delta + sizeSide * remainder; i++) {
+                matrixLocal[i] = matrix[i];
+            }
+        } else {
+            for (int i = 0; i < sizeSide * delta; i++) {
+                matrixLocal[i] = matrix[i];
+            }
+        }
+    } else {
+        MPI_Status status;
+        if (delta != 0) {
+            MPI_Recv(&matrixLocal[0], delta * sizeSide, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, &status);
+        }
+    }
+
+    int iters = 0;
+    double eps = 0.1, beta = 0.0, alpha = 0.0, check = 0.0;
+
+    std::vector<double> result(sizeSide);
+    for (int i = 0; i < sizeSide; i++) {
+        result[i] = 1;
+    }
+    std::vector<double> Ah = matrixVectorMult(matrixLocal, result);
+
+
+    std::vector<double> rprev(delta), rnext(delta);
+    if (rank == 0) {
+        if (remainder != 0) {
+            rprev.resize(delta + remainder);
+            rnext.resize(delta + remainder);
+        }
+        for (int i = 0; i < delta + remainder; i++)
+            rprev[i] = vector[i] - Ah[i]; // r^(k) = b - A * result
+    } else {
+        for (int i = 0; i < delta; i++)
+            rprev[i] = vector[rank * delta + remainder + i] - Ah[i]; // r^(k) = b - A * result
+    }
+
+    std::vector<double> h(sizeSide); // h = r^(k)
+    if (rank == 0) {
+        if (remainder != 0) {
+            for (int i = 0; i < delta + remainder; i++) {
+                h[i] = rprev[i];
+            }
+        }
+        else {
+            for (int i = 0; i < delta; i++) {
+                h[i] = rprev[i];
+            }
+        }
+        if (delta != 0) {
+            MPI_Status status;
+            for (int proc = 1; proc < comm_size; proc++) {
+                MPI_Recv(&h[0] + proc * delta + remainder,
+                    delta, MPI_DOUBLE, proc, 2, MPI_COMM_WORLD, &status);
+            }
+        }
+    } else {
+        if (delta != 0) {
+            MPI_Send(&rprev[0], delta, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
+        }
+    }
+    MPI_Bcast(h.data(), sizeSide, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    do {
+        iters++;
+        Ah = matrixVectorMult(matrixLocal, h); // Ah = A * h
+
+        std::vector<double> hblock(delta);
+        if (rank == 0) {
+            if (remainder != 0) {
+                hblock.resize(delta + remainder);
+            }
+            for (int i = 0; i < delta + remainder; i++) {
+                hblock[i] = h[i]; // r^(k+1) = r^(k)-alpha*Ah
+            }
+        } else {
+            for (int i = 0; i < delta; i++) {
+                hblock[i] = h[rank * delta + remainder + i]; // r^(k+1) = r^(k)-alpha*Ah
+            }
+        }
+
+        double tmp1 = vectorMult(rprev, rprev), rprevScal;
+        double tmp2 = vectorMult(hblock, Ah), znam;
+        MPI_Allreduce(&tmp1, &rprevScal, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+        MPI_Allreduce(&tmp2, &znam, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+
+        alpha = rprevScal / znam;
+        for (int i = 0; i < sizeSide; i++) {
+            result[i] += alpha * h[i];
+        }
+        if (rank == 0) {
+            for (int i = 0; i < delta + remainder; i++) {
+                rnext[i] = rprev[i] - alpha * Ah[i]; // r^(k+1) = r^(k)-alpha*Ah
+            }
+        } else {
+            for (int i = 0; i < delta; i++) {
+                rnext[i] = rprev[i] - alpha * Ah[i]; // r^(k+1) = r^(k)-alpha*Ah
+            }
+        }
+
+        double rnextScal;
+        tmp1 = vectorMult(rnext, rnext);
+        MPI_Allreduce(&tmp1, &rnextScal, 1, MPI_DOUBLE, MPI_SUM, MPI_COMM_WORLD);
+        beta = rnextScal / rprevScal;
+
+        // Norma neviazki
+        check = sqrt(rnextScal);
+
+        if (rank == 0) {
+            for (int i = 0; i < delta + remainder; i++) {
+                h[i] = rnext[i] + beta * h[i]; // r^(k+1) = r^(k)-alpha*Ah
+            }
+
+            if (delta != 0) {
+                MPI_Status status;
+                for (int proc = 1; proc < comm_size; proc++) {
+                    MPI_Recv(&h[0] + proc * delta + remainder,
+                        delta, MPI_DOUBLE, proc, 3, MPI_COMM_WORLD, &status);
+                }
+            }
+        }
+        else {
+            std::vector<double> hlocal(delta);
+            for (int i = 0; i < delta; i++) {
+                hlocal[i] = rnext[i] + beta * h[rank * delta + remainder + i]; // r^(k+1) = r^(k)-alpha*Ah
+            }
+
+            if (delta != 0) {
+                MPI_Send(&hlocal[0], delta, MPI_DOUBLE, 0, 3, MPI_COMM_WORLD);
+            }
+        }
+        MPI_Bcast(h.data(), sizeSide, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+        rprev = rnext;
+    } while ((check > eps) && (iters <= sizeSide));
+
+    return result;
+
 }

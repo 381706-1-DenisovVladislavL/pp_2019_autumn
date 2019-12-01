@@ -12,9 +12,9 @@ double vectorMult(const std::vector<double>& vectorA, const std::vector<double>&
 std::vector<double> matrixVectorMult(const std::vector<double>& matrix, const std::vector<double>& vector);
 
 std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> vector,
+    int size);
+std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> vector,
     int sizeSide);
-// std::vector<int> getSolvePar(std::vector<double> matrixA, std::vector<double> vectorB,
-//    int sizeSide);
 
 void printMatrix(std::vector<double> matrix, int size);
 void printVector(std::vector<double> vector, int size);

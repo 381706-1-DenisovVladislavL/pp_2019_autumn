@@ -32,9 +32,13 @@ TEST(gradient_method, seq_solve) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    int size = 5;
+    int size = 10;
     std::vector<double> matrix = createRandomMatrix(size);
     std::vector<double> vector = createRandomVector(size);
+
+    double startPar = MPI_Wtime();
+    std::vector<double> resultPar = getSolvePar(matrix, vector, size);
+    double endPar = MPI_Wtime();
 
     if (rank == 0) {
         printSystem(matrix, vector, size);
@@ -42,8 +46,13 @@ TEST(gradient_method, seq_solve) {
         std::vector<double> resultSeq = getSolveSeq(matrix, vector, size);
         double endSeq = MPI_Wtime();
         std::cout << "Time seq: " << endSeq - startSeq << std::endl;
-
         printVector(resultSeq, size);
+
+        std::cout << "Time par: " << endPar - startPar << std::endl;
+        printVector(resultPar, size);
+
+        for (int i = 0; i < resultSeq.size(); ++i)
+            ASSERT_NEAR(resultSeq[i], resultPar[i], 0.05);
     }
 }
 
