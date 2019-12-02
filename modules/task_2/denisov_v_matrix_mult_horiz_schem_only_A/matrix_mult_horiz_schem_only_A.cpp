@@ -130,8 +130,7 @@ std::vector<int> getMatrixMultPar(const std::vector<int>& matrixA, const std::ve
             for (int i = 0; i < sizeSide * (delta + remainder); i++) {
                 resultGlobal[i] = resultLocal[i];
             }
-        }
-        else {
+        } else {
             for (int i = 0; i < sizeSide * delta; i++) {
                 resultGlobal[i] = resultLocal[i];
             }
