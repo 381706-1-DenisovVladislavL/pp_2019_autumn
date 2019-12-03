@@ -242,21 +242,25 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
     }
     MPI_Bcast(h.data(), sizeSide, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
+    std::vector<double> hblock(delta);
+    std::vector<double> hlocal(delta);
+    if (rank == 0) {
+        if (remainder != 0) {
+            hblock.resize(delta + remainder);
+        }
+    }
+
     do {
         iters++;
         Ah = matrixVectorMult(matrixLocal, h);  // Ah = A * h
 
-        std::vector<double> hblock(delta);
         if (rank == 0) {
-            if (remainder != 0) {
-                hblock.resize(delta + remainder);
-            }
             for (int i = 0; i < delta + remainder; i++) {
-                hblock[i] = h[i];  // r^(k+1) = r^(k)-alpha*Ah
+                hblock[i] = h[i];
             }
         } else {
             for (int i = 0; i < delta; i++) {
-                hblock[i] = h[rank * delta + remainder + i];  // r^(k+1) = r^(k)-alpha*Ah
+                hblock[i] = h[rank * delta + remainder + i];
             }
         }
 
@@ -300,7 +304,6 @@ std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> 
                 }
             }
         } else {
-            std::vector<double> hlocal(delta);
             for (int i = 0; i < delta; i++) {
                 hlocal[i] = rnext[i] + beta * h[rank * delta + remainder + i];  // r^(k+1) = r^(k)-alpha*Ah
             }
