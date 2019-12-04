@@ -153,7 +153,8 @@ std::vector<double> getSolveSeq(const std::vector<double>& matrix, const std::ve
     return result;
 }
 
-std::vector<double> getSolvePar(const std::vector<double>& matrixInput, const std::vector<double>& vectorInput, int sizeSide) {
+std::vector<double> getSolvePar(const std::vector<double>& matrixInput, const std::vector<double>& vectorInput, 
+    int sizeSide) {
     if (sizeSide <= 0)
         throw "Error size";
 
