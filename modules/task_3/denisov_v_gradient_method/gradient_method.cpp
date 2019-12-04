@@ -112,7 +112,7 @@ std::vector<double> matrixVectorMult(const std::vector<double>& matrix, const st
     return res;
 }
 
-std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> vector, int size) {
+std::vector<double> getSolveSeq(const std::vector<double>& matrix, const std::vector<double>& vector, int size) {
     if (size <= 0)
         throw "Error size";
 
@@ -153,9 +153,15 @@ std::vector<double> getSolveSeq(std::vector<double> matrix, std::vector<double> 
     return result;
 }
 
-std::vector<double> getSolvePar(std::vector<double> matrix, std::vector<double> vector, int sizeSide) {
+std::vector<double> getSolvePar(const std::vector<double>& matrixInput, const std::vector<double>& vectorInput, int sizeSide) {
     if (sizeSide <= 0)
         throw "Error size";
+
+    std::vector<double> matrix = matrixInput;
+    std::vector<double> vector = vectorInput;
+
+    MPI_Bcast(matrix.data(), sizeSide * sizeSide, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Bcast(vector.data(), sizeSide, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     int comm_size, rank;
     MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
