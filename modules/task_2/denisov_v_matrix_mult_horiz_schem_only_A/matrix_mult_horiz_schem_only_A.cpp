@@ -44,7 +44,8 @@ std::vector<int> getMatrixMultSeq(const std::vector<int>& matrixA, const std::ve
     return matrixResult;
 }
 
-std::vector<int> getMatrixMultPar(const std::vector<int>& matrixLeft, const std::vector<int>& matrixRight, int sizeSide) {
+std::vector<int> getMatrixMultPar(const std::vector<int>& matrixLeft, const std::vector<int>& matrixRight,
+    int sizeSide) {
     if (sizeSide <= 0)
         throw "Error size of matrix";
 
