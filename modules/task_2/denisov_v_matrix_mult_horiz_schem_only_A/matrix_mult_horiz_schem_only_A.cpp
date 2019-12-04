@@ -44,17 +44,20 @@ std::vector<int> getMatrixMultSeq(const std::vector<int>& matrixA, const std::ve
     return matrixResult;
 }
 
-std::vector<int> getMatrixMultPar(const std::vector<int>& matrixA, const std::vector<int>& matrixB, int sizeSide) {
+std::vector<int> getMatrixMultPar(const std::vector<int>& matrixLeft, const std::vector<int>& matrixRight, int sizeSide) {
     if (sizeSide <= 0)
         throw "Error size of matrix";
 
     int sizeVector = sizeSide * sizeSide;
-    if (matrixA.size() != static_cast<unsigned int>(sizeVector) ||
-        matrixB.size() != static_cast<unsigned int>(sizeVector))
+    if (matrixLeft.size() != static_cast<unsigned int>(sizeVector) ||
+        matrixRight.size() != static_cast<unsigned int>(sizeVector))
         throw "The dimensions of the matrices do not correspond to the parameter passed.";
 
+    std::vector<int> matrixA = matrixLeft;
+    std::vector<int> matrixB = matrixRight;
+    MPI_Bcast(matrixA.data(), sizeVector, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(matrixB.data(), sizeVector, MPI_INT, 0, MPI_COMM_WORLD);
 
-    std::vector<int> matrixRight = matrixB;
     int size, rank;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
