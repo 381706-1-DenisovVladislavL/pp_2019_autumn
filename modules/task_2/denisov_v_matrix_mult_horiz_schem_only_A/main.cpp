@@ -165,6 +165,7 @@ TEST(matrix_mult_horiz_schem_only_A, check_correct_par_mult_matrix) {
 //    }
 // }
 
+
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     MPI_Init(&argc, &argv);
