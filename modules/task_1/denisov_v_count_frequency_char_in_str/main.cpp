@@ -4,6 +4,7 @@
 #include <cstring>
 #include "./count_frequency_char_in_str.h"
 
+
 TEST(Count_frequency_char_in_str, count_a_character_in_string) {
     int rank;
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
