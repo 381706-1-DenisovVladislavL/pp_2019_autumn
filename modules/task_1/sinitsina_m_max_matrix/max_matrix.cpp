@@ -55,10 +55,10 @@ int MaxMatrix(const std::vector<int>& vect, int row, int col) {
     if (rank == 0) {
         tmp = *max_element(vect.begin(), vect.begin() + delta + ost);
     } else {
-       if (delta > 1) {
+        if (delta > 1) {
             MPI_Recv(&vect1[0], delta, MPI_INT, 0, 0, MPI_COMM_WORLD, &status);
             tmp = std::max(tmp, *max_element(vect1.begin(), vect1.begin() + delta));
-       }
+        }
     }
     MPI_Reduce(&tmp, &res, 1, MPI_INT, MPI_MAX, 0, MPI_COMM_WORLD);
     return res;
